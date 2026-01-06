@@ -1,0 +1,19 @@
+/* Basic placeholder styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+  color: #212529;
+}
+header {
+  background: #007bff;
+  color: white;
+  padding: 1rem;
+}
+.product-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 4px;
+  background: white;
+}
