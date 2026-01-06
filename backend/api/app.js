@@ -14,3 +14,9 @@ app.use('/api/products', products);
 app.get('/', (req, res) => res.send('Delivery API running'));
 
 module.exports = app;
+
+// Basic JSON error handler
+app.use((err, req, res, next) => {
+	console.error(err);
+	res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
+});

@@ -6,7 +6,14 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
-    "client": "echo \"Add frontend start/build script\""
+    "client": "echo \"Add frontend start/build script\"",
+    "test:sanity": "node backend/test/sanity.js",
+    "test": "jest --runInBand --detectOpenHandles"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/backend/test/jest.setup.js"],
+    "testTimeout": 20000
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -15,6 +22,9 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "jest": "30.2.0",
+    "mongodb-memory-server": "11.0.1",
+    "nodemon": "^2.0.22",
+    "supertest": "7.2.2"
   }
 }

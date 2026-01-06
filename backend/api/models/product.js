@@ -1,5 +1,12 @@
-// Placeholder Product model
-// Replace with a proper Mongoose schema or other ORM model as needed
-module.exports = {
-  // fields: { name: String, price: Number, ... }
-};
+const mongoose = require('mongoose');
+
+const ProductSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    price: { type: Number, required: true, min: 0 },
+    description: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.models.Product || mongoose.model('Product', ProductSchema);
