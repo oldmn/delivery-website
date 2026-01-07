@@ -18,7 +18,7 @@ router.get('/:id', async (req, res) => {
     const user = await User.findById(req.params.id).lean();
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
-  } catch (err) {
+  } catch {
     res.status(400).json({ error: 'Invalid user id' });
   }
 });

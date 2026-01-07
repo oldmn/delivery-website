@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
     const d = await Delivery.findById(req.params.id).populate('product user').lean();
     if (!d) return res.status(404).json({ error: 'Delivery not found' });
     res.json(d);
-  } catch (err) {
+  } catch {
     res.status(400).json({ error: 'Invalid delivery id' });
   }
 });
