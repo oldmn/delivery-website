@@ -26,7 +26,10 @@ describe('Products API', () => {
   });
 
   test('PUT /api/products/:id -> updates product', async () => {
-    const res = await request(app).put(`/api/products/${created._id}`).send({ price: 12.5 }).expect(200);
+    const res = await request(app)
+      .put(`/api/products/${created._id}`)
+      .send({ price: 12.5 })
+      .expect(200);
     expect(res.body.price).toBe(12.5);
   });
 

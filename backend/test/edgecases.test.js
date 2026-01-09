@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../api/app');
 const mongoose = require('mongoose');
 const User = require('../api/models/user');
-const Product = require('../api/models/product');
+// Product model not used in these tests
 
 describe('Edge cases and validation tests', () => {
   afterAll(async () => {
@@ -21,14 +21,18 @@ describe('Edge cases and validation tests', () => {
   });
 
   test('Creating deliveries with missing product/user returns 400', async () => {
-    const res = await request(app).post('/api/deliveries').send({ product: mongoose.Types.ObjectId(), user: mongoose.Types.ObjectId() });
+    const res = await request(app)
+      .post('/api/deliveries')
+      .send({ product: mongoose.Types.ObjectId(), user: mongoose.Types.ObjectId() });
     expect(res.status).toBe(400);
   });
 
   test('Duplicate email prevented', async () => {
     const u = new User({ name: 'D', email: 'dup@example.com' });
     await u.save();
-    const res = await request(app).post('/api/users').send({ name: 'Dup', email: 'dup@example.com' });
+    const res = await request(app)
+      .post('/api/users')
+      .send({ name: 'Dup', email: 'dup@example.com' });
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/exists/);
   });

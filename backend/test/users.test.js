@@ -26,7 +26,10 @@ describe('Users API', () => {
   });
 
   test('PUT /api/users/:id -> updates user', async () => {
-    const res = await request(app).put(`/api/users/${created._id}`).send({ name: 'Alice2' }).expect(200);
+    const res = await request(app)
+      .put(`/api/users/${created._id}`)
+      .send({ name: 'Alice2' })
+      .expect(200);
     expect(res.body.name).toBe('Alice2');
   });
 

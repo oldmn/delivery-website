@@ -11,10 +11,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:sanity": "node backend/test/sanity.js",
-    "test": "jest --runInBand --detectOpenHandles"
+    "test": "jest --runInBand --detectOpenHandles",
     "lint": "eslint . --ext .js --ext .jsx --max-warnings=0",
-    "lint:fix": "eslint . --ext .js --ext .jsx --fix"
-    ,"coverage": "jest --coverage",
+    "lint:fix": "eslint . --ext .js --ext .jsx --fix",
+    "coverage": "jest --coverage",
     "coverage:nyc": "nyc --reporter=lcov --reporter=text npm test"
   },
   "jest": {
@@ -25,7 +25,10 @@
     "testTimeout": 20000,
     "collectCoverage": true,
     "coverageDirectory": "coverage",
-    "coverageReporters": ["text", "lcov"],
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 70,
@@ -53,11 +56,11 @@
     "mongodb-memory-server": "11.0.1",
     "nodemon": "^2.0.22",
     "supertest": "7.2.2"
-  }
+  },
   "lint-staged": {
     "*.{js,jsx,json,md,css}": [
       "prettier --write",
       "eslint --fix"
     ]
-  },
+  }
 }

@@ -44,15 +44,27 @@ describe('Validation & Edge-case tests', () => {
 
   test('PUT /api/deliveries/:id -> invalid enum value returns 400', async () => {
     // create user & product
-    const ru = await request(app).post('/api/users').send({ name: 'E', email: 'e@example.com' }).expect(201);
+    const ru = await request(app)
+      .post('/api/users')
+      .send({ name: 'E', email: 'e@example.com' })
+      .expect(201);
     const rp = await request(app).post('/api/products').send({ name: 'EE', price: 1 }).expect(201);
-    const rd = await request(app).post('/api/deliveries').send({ product: rp.body._id, user: ru.body._id }).expect(201);
+    const rd = await request(app)
+      .post('/api/deliveries')
+      .send({ product: rp.body._id, user: ru.body._id })
+      .expect(201);
 
-    await request(app).put(`/api/deliveries/${rd.body._id}`).send({ status: 'NotAStatus' }).expect(400);
+    await request(app)
+      .put(`/api/deliveries/${rd.body._id}`)
+      .send({ status: 'NotAStatus' })
+      .expect(400);
   });
 
   test('POST /api/deliveries -> duplicate trackingId should return 400', async () => {
-    const ru = await request(app).post('/api/users').send({ name: 'T1', email: 't1@example.com' }).expect(201);
+    const ru = await request(app)
+      .post('/api/users')
+      .send({ name: 'T1', email: 't1@example.com' })
+      .expect(201);
     const rp = await request(app).post('/api/products').send({ name: 'T2', price: 2 }).expect(201);
     const payload = { product: rp.body._id, user: ru.body._id, trackingId: 'TRACK-123' };
     await request(app).post('/api/deliveries').send(payload).expect(201);

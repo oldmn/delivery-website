@@ -7,9 +7,15 @@ describe('Deliveries API', () => {
   let delivery;
 
   test('setup - create user & product', async () => {
-    const ru = await request(app).post('/api/users').send({ name: 'Bob', email: 'bob@example.com' }).expect(201);
+    const ru = await request(app)
+      .post('/api/users')
+      .send({ name: 'Bob', email: 'bob@example.com' })
+      .expect(201);
     user = ru.body;
-    const rp = await request(app).post('/api/products').send({ name: 'Gadget', price: 5.5 }).expect(201);
+    const rp = await request(app)
+      .post('/api/products')
+      .send({ name: 'Gadget', price: 5.5 })
+      .expect(201);
     product = rp.body;
   });
 
@@ -31,7 +37,10 @@ describe('Deliveries API', () => {
   });
 
   test('PUT /api/deliveries/:id -> updates status', async () => {
-    const res = await request(app).put(`/api/deliveries/${delivery._id}`).send({ status: 'Delivered' }).expect(200);
+    const res = await request(app)
+      .put(`/api/deliveries/${delivery._id}`)
+      .send({ status: 'Delivered' })
+      .expect(200);
     expect(res.body.status).toBe('Delivered');
   });
 

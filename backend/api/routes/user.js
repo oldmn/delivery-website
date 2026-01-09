@@ -6,9 +6,9 @@ const User = require('../models/user');
 router.get('/', async (req, res) => {
   try {
     const users = await User.find().limit(100).lean();
-    res.json(users);
+    return res.json(users);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
@@ -16,10 +16,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).lean();
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json(user);
+    if (!user) {return res.status(404).json({ error: 'User not found' });}
+    return res.json(user);
   } catch {
-    res.status(400).json({ error: 'Invalid user id' });
+    return res.status(400).json({ error: 'Invalid user id' });
   }
 });
 
@@ -27,26 +27,29 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     // Prevent duplicate emails with an explicit check so we return 400
-    if (!req.body?.email) return res.status(400).json({ error: 'Email is required' });
+    if (!req.body?.email) {return res.status(400).json({ error: 'Email is required' });}
     const existing = await User.findOne({ email: req.body.email });
-    if (existing) return res.status(400).json({ error: 'Email already exists' });
+    if (existing) {return res.status(400).json({ error: 'Email already exists' });}
 
     const user = new User(req.body);
     await user.save();
-    res.status(201).json(user);
+    return res.status(201).json(user);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 });
 
 // PUT /api/users/:id
 router.put('/:id', async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json(user);
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!user) {return res.status(404).json({ error: 'User not found' });}
+    return res.json(user);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 });
 
@@ -54,10 +57,10 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.status(204).end();
+    if (!user) {return res.status(404).json({ error: 'User not found' });}
+    return res.status(204).end();
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 });
 

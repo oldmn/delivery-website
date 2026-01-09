@@ -6,3 +6,4 @@ public/
 frontend/assets/images/
 *.min.js
 .husky/
+.github/workflows/**

@@ -7,6 +7,68 @@ on:
     branches: [ main ]
 
 jobs:
+  ci-pipeline:
+    name: CI pipeline (format → lint → test → coverage)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Ensure formatting (Prettier)
+        run: npm run format:check
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Start local MongoDB service (for tests)
+        run: |
+          docker run -d --name ci-mongo -p 27017:27017 mongo:6.0 || true
+
+      - name: Wait for MongoDB
+        run: |
+          for i in {1..30}; do
+            if nc -z localhost 27017; then
+              echo "Mongo is up"; break
+            fi
+            sleep 1
+          done
+
+      - name: Run tests (Jest)
+        run: npm test
+
+      - name: Run coverage
+        run: npm run coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
   format:
     name: Format check
     runs-on: ubuntu-latest
@@ -63,144 +125,38 @@ jobs:
     services:
       mongo:
         image: mongo:6.0
-        ports: ['27017:27017']
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-        include:
-          - node-version: 16.x
-            use-system-mongo: true
-            mongo-uri: mongodb://localhost:27017/delivery_test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
-            npm ci
-          else
-            npm install
-          fi
-
-      - name: Wait for MongoDB (if requested)
-        if: matrix.use-system-mongo == 'true'
-        run: |
-          for i in {1..30}; do
-            if nc -z localhost 27017; then
-              echo "Mongo is up"; break
-            fi
-            sleep 1
-          done
-
-      - name: Set env for system mongo
-        if: matrix.use-system-mongo == 'true'
-        run: |
-          echo "USE_SYSTEM_MONGO=true" >> $GITHUB_ENV
-          echo "MONGO_URI=$MATRIX_MONGO_URI" >> $GITHUB_ENV
-
-      - name: Run tests
-        run: npm test
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report-${{ matrix.node-version }}
-          path: coverage
-
-      - name: Publish coverage to Codecov (optional)
-        if: secrets.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@v4
-        with:
-          files: coverage/lcov.info
-          fail_ci_if_error: true
+        coverage:
+          name: Coverage
+          needs: [test]
+          runs-on: ubuntu-latest
+          steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-  coverage:
-    name: Coverage
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 18.x
+                cache: 'npm'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-          cache: 'npm'
+            - name: Install dependencies
+              run: |
+                if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
+                  npm ci
+                else
+                  npm install
+                fi
 
-      - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
-            npm ci
-          else
-            npm install
-          fi
+            - name: Run coverage (jest)
+              run: npm run coverage
 
-      - name: Run coverage (jest)
-        run: npm run coverage
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage
-name: CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    name: Run tests
-    runs-on: ubuntu-latest
-    services:
-      mongo:
-        image: mongo:6.0
-        ports: ['27017:27017']
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-        include:
-          - node-version: 16.x
-            use-system-mongo: true
-            mongo-uri: mongodb://localhost:27017/delivery_test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-          lint:
-            name: Lint
-            runs-on: ubuntu-latest
-            steps:
-              - name: Checkout
-                uses: actions/checkout@v4
-
-              - name: Setup Node.js
-                uses: actions/setup-node@v4
-                with:
-                  node-version: 18.x
-                  cache: 'npm'
-
-              - name: Install dependencies
-                run: |
-                  if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ] || [ -f yarn.lock ]; then
-                    npm ci
-                  else
-                    npm install
-                  fi
+            - name: Upload coverage report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                name: coverage-report
+                path: coverage
 
               - name: Ensure formatting (Prettier)
                 run: npm run format:check
