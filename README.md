@@ -60,6 +60,7 @@ cp .env.example .env
 ### API Endpoints
 
 **Users**
+
 - `GET /api/users` - List all users
 - `GET /api/users/:id` - Get user by ID
 - `POST /api/users` - Create new user
@@ -67,6 +68,7 @@ cp .env.example .env
 - `DELETE /api/users/:id` - Delete user
 
 **Products**
+
 - `GET /api/products` - List all products
 - `GET /api/products/:id` - Get product by ID
 - `POST /api/products` - Create new product
@@ -74,6 +76,7 @@ cp .env.example .env
 - `DELETE /api/products/:id` - Delete product
 
 **Deliveries**
+
 - `GET /api/deliveries` - List all deliveries
 - `GET /api/deliveries/:id` - Get delivery by ID
 - `POST /api/deliveries` - Create new delivery
@@ -81,6 +84,7 @@ cp .env.example .env
 - `DELETE /api/deliveries/:id` - Delete delivery
 
 **System**
+
 - `GET /api/health` - Health check (database status, uptime)
 - `GET /` - API running confirmation
 
@@ -102,6 +106,7 @@ cp .env.example .env
 ### Test Coverage: 83.78% Statements, 71.05% Branches
 
 **Test Suites (5 total, 30 tests)**
+
 - `users.test.js` - User CRUD and validation (6 tests)
 - `products.test.js` - Product CRUD and validation (6 tests)
 - `deliveries.test.js` - Delivery CRUD and validation (6 tests)
@@ -120,6 +125,7 @@ cp .env.example .env
 ### Workflows
 
 **test-coverage.yml** - Runs on every push
+
 - Installs dependencies
 - Prettier format check
 - ESLint linting
@@ -130,12 +136,15 @@ cp .env.example .env
 **ci.yml** - Linting workflow
 
 **deploy-heroku.yml** - Deploy to Heroku
+
 - Test → Lint → Deploy → Health Check
 
 **deploy-aws.yml** - Deploy to AWS
+
 - Test → Build → Deploy → Health Check
 
 **deploy-vercel.yml** - Deploy to Vercel
+
 - Test → Deploy → Health Check
 
 ### CI Status
@@ -158,12 +167,14 @@ View all workflows: https://github.com/oldmn/delivery-website/actions
 Choose your platform and follow the setup guide:
 
 1. **Heroku (Recommended for quick start)**
+
    ```bash
    # Takes ~10 minutes to set up
    # See DEPLOYMENT.md for detailed instructions
    ```
 
 2. **AWS (Recommended for production)**
+
    ```bash
    # Takes ~30 minutes to set up
    # See DEPLOYMENT.md for detailed instructions
@@ -205,6 +216,7 @@ For production deployments, configure in your hosting platform.
 ## 🛠️ Tech Stack
 
 **Backend**
+
 - Node.js 18.x / 20.x
 - Express 4.18
 - MongoDB + Mongoose 7.0
@@ -212,10 +224,12 @@ For production deployments, configure in your hosting platform.
 - Prettier & ESLint for code quality
 
 **Frontend** (Ready to build)
+
 - React 18.2
 - React DOM 18.2
 
 **DevOps**
+
 - GitHub Actions (CI/CD)
 - Docker (optional)
 - Heroku / AWS / Vercel
@@ -229,24 +243,28 @@ For production deployments, configure in your hosting platform.
 ## 🎯 Next Steps
 
 ### Immediate
+
 - [ ] Choose a deployment platform
 - [ ] Follow DEPLOYMENT.md for setup
 - [ ] Deploy backend to production
 - [ ] Test health endpoint
 
 ### Short-term
+
 - [ ] Build React frontend components
 - [ ] Connect frontend to backend
 - [ ] Add authentication (JWT/OAuth)
 - [ ] Enhance error handling
 
 ### Medium-term
+
 - [ ] Set up database backups
 - [ ] Configure logging and monitoring
 - [ ] Add API documentation (Swagger)
 - [ ] Implement rate limiting
 
 ### Long-term
+
 - [ ] Add advanced filtering/search
 - [ ] Real-time updates (WebSockets)
 - [ ] Performance optimization
@@ -270,6 +288,7 @@ MIT
 ## 📞 Support
 
 For issues or questions:
+
 1. Check [DEPLOYMENT.md](./DEPLOYMENT.md) troubleshooting section
 2. Review GitHub Actions logs
 3. Check MongoDB connection string

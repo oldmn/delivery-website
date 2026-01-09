@@ -5,6 +5,7 @@ This project includes three GitHub Actions deployment workflows for different ho
 ## Overview
 
 Three deployment workflows have been configured:
+
 - **Heroku**: Best for quick deployments, easy setup, integrated PostgreSQL/MongoDB
 - **AWS**: Best for scalability, complex infrastructure, multiple services
 - **Vercel**: Best for serverless deployments, frontend-heavy applications
@@ -22,27 +23,32 @@ Three deployment workflows have been configured:
 #### Setup Steps
 
 1. **Create a Heroku Account**
+
    - Go to [heroku.com](https://www.heroku.com) and sign up
    - Verify your email
 
 2. **Install Heroku CLI** (optional, for local testing)
+
    ```bash
    npm install -g heroku
    heroku login
    ```
 
 3. **Create a Heroku App**
+
    ```bash
    heroku create delivery-website
    ```
 
 4. **Get Your Credentials**
+
    ```bash
    heroku auth:token
    # Copy this token for HEROKU_API_KEY
    ```
 
 5. **Add GitHub Secrets**
+
    - Go to your GitHub repo → Settings → Secrets and variables → Actions
    - Add these secrets:
      - `HEROKU_API_KEY`: Your Heroku API token (from step 4)
@@ -50,6 +56,7 @@ Three deployment workflows have been configured:
      - `HEROKU_EMAIL`: Your Heroku account email
 
 6. **Configure Heroku Environment**
+
    ```bash
    heroku config:set NODE_ENV=production -a delivery-website
    heroku config:set MONGODB_URI=<your-mongodb-connection-string> -a delivery-website
@@ -57,13 +64,16 @@ Three deployment workflows have been configured:
    ```
 
 7. **Add Procfile** (if not present)
+
    ```bash
    echo "web: npm start" > Procfile
    git add Procfile && git commit -m "Add Procfile for Heroku"
    ```
 
 8. **Deploy**
+
    - Push to `main` branch to trigger automatic deployment:
+
    ```bash
    git push origin main
    ```
@@ -76,6 +86,7 @@ Three deployment workflows have been configured:
    ```
 
 #### Verify Deployment
+
 ```bash
 # Your app is live at:
 https://delivery-website.herokuapp.com
@@ -93,16 +104,19 @@ curl https://delivery-website.herokuapp.com/api/health
 #### Setup Steps
 
 1. **Create AWS Account**
+
    - Go to [aws.amazon.com](https://aws.amazon.com)
    - Create account and verify
 
 2. **Set Up EC2 Instance**
+
    ```bash
    # Launch an EC2 instance (Ubuntu 22.04 LTS recommended)
    # Security group: Allow ports 22, 80, 443
    ```
 
 3. **Install Node.js on EC2**
+
    ```bash
    ssh -i your-key.pem ubuntu@your-ec2-public-ip
    curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
@@ -111,6 +125,7 @@ curl https://delivery-website.herokuapp.com/api/health
    ```
 
 4. **Clone Repository on EC2**
+
    ```bash
    cd /var/www
    git clone https://github.com/oldmn/delivery-website.git
@@ -120,17 +135,20 @@ curl https://delivery-website.herokuapp.com/api/health
    ```
 
 5. **Create S3 Bucket for Deployments**
+
    ```bash
    aws s3 mb s3://delivery-website-deployments --region us-east-1
    ```
 
 6. **Create IAM User for CI/CD**
+
    - Go to AWS IAM console
    - Create a new user: `github-actions`
    - Attach policies: `AmazonS3FullAccess`, `AmazonEC2FullAccess`
    - Generate access key and secret
 
 7. **Add GitHub Secrets**
+
    - `AWS_ACCESS_KEY_ID`: From IAM user
    - `AWS_SECRET_ACCESS_KEY`: From IAM user
    - `AWS_REGION`: `us-east-1` (or your region)
@@ -140,6 +158,7 @@ curl https://delivery-website.herokuapp.com/api/health
    - `AWS_EC2_DEPLOY_KEY`: Your EC2 private key content
 
 8. **Configure Security**
+
    - Add EC2 instance public key to GitHub deploy keys
    - Restrict IAM user permissions to only S3 and EC2
 
@@ -149,6 +168,7 @@ curl https://delivery-website.herokuapp.com/api/health
    ```
 
 #### Verify Deployment
+
 ```bash
 # SSH into EC2
 ssh -i your-key.pem ubuntu@your-ec2-public-ip
@@ -172,24 +192,29 @@ curl http://your-ec2-public-ip/api/health
 #### Setup Steps
 
 1. **Create Vercel Account**
+
    - Go to [vercel.com](https://vercel.com)
    - Sign up with GitHub
 
 2. **Create Vercel Project**
+
    - Import your GitHub repo
    - Select project settings
 
 3. **Get Credentials**
+
    - Go to Vercel dashboard → Settings → Tokens
    - Create access token
 
 4. **Add GitHub Secrets**
+
    - `VERCEL_ORG_ID`: From Vercel dashboard
    - `VERCEL_PROJECT_ID`: From project settings
    - `VERCEL_TOKEN`: Your access token
    - `VERCEL_APP_URL`: Your Vercel app URL (e.g., `https://delivery-website.vercel.app`)
 
 5. **Configure Environment Variables**
+
    - Go to Vercel dashboard → Settings → Environment Variables
    - Add: `MONGODB_URI`, `NODE_ENV=production`
 
@@ -199,6 +224,7 @@ curl http://your-ec2-public-ip/api/health
    ```
 
 #### Verify Deployment
+
 ```bash
 # Your app is live at:
 https://delivery-website.vercel.app
@@ -214,6 +240,7 @@ curl https://delivery-website.vercel.app/api/health
 All deployment workflows follow this pipeline:
 
 1. **Test Stage** (runs on both Node 18.x and 20.x)
+
    - ✅ Install dependencies
    - ✅ Format check (Prettier)
    - ✅ Lint check (ESLint)
@@ -221,6 +248,7 @@ All deployment workflows follow this pipeline:
    - ✅ Generate coverage reports
 
 2. **Build Stage** (AWS only)
+
    - ✅ Build application
    - ✅ Create deployment package
 
@@ -254,6 +282,7 @@ module.exports = router;
 ## Monitoring & Rollback
 
 ### Heroku
+
 ```bash
 # View logs
 heroku logs --tail -a delivery-website
@@ -264,6 +293,7 @@ heroku rollback v5 -a delivery-website
 ```
 
 ### AWS
+
 ```bash
 # SSH into instance
 ssh -i key.pem ubuntu@your-ip
@@ -279,12 +309,14 @@ pm2 logs delivery-website
 ```
 
 ### Vercel
+
 - Dashboard automatically shows deployment history
 - Click "Rollback" button on any previous deployment
 
 ## Environment Variables
 
 ### Common Variables
+
 ```
 NODE_ENV=production
 MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/delivery-website
@@ -292,6 +324,7 @@ PORT=5000
 ```
 
 ### Platform-Specific
+
 - **Heroku**: Use `heroku config:set` command
 - **AWS**: Set via EC2 `.env` file or Secrets Manager
 - **Vercel**: Set via dashboard or `vercel env`
@@ -299,18 +332,21 @@ PORT=5000
 ## Troubleshooting
 
 ### Deployment Fails
+
 1. Check GitHub Actions logs (Actions tab → workflow run)
 2. Verify all secrets are configured correctly
 3. Ensure environment variables are set on target platform
 4. Check health endpoint returns 200 status
 
 ### Health Check Fails
+
 1. Verify backend is running: `pm2 status` or `heroku ps`
 2. Check logs for errors
 3. Ensure MongoDB connection string is correct
 4. Add `/api/health` route if missing
 
 ### Tests Fail in CI
+
 1. Run tests locally: `npm test`
 2. Check for timing issues (increase timeout in jest.config)
 3. Verify mongodb-memory-server compatibility with Node version
@@ -324,7 +360,7 @@ To prevent automatic deployment on every push to `main`:
 2. Change trigger:
    ```yaml
    on:
-     workflow_dispatch:  # Manual trigger only
+     workflow_dispatch: # Manual trigger only
    ```
 
 ## Next Steps

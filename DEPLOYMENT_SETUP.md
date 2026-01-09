@@ -5,12 +5,14 @@
 ### GitHub Actions Workflows Created
 
 1. **deploy-heroku.yml** - Deploy to Heroku
+
    - Runs tests (Node 18.x, 20.x)
    - Deploys on push to main
    - Health checks post-deployment
    - Automatic rollback on failure
 
 2. **deploy-aws.yml** - Deploy to AWS (EC2)
+
    - Runs tests (Node 18.x, 20.x)
    - Builds application
    - Packages and uploads to S3
@@ -26,6 +28,7 @@
 ### Backend Updates
 
 - **`/api/health` Endpoint**: Ready for deployment health checks
+
   - Returns MongoDB connection status
   - Reports app version and environment
   - Provides uptime metrics
@@ -44,10 +47,10 @@
 
 Choose ONE of these three options based on your needs:
 
-| Platform | Best For | Setup Time | Cost |
-|----------|----------|-----------|------|
+| Platform   | Best For                   | Setup Time | Cost                |
+| ---------- | -------------------------- | ---------- | ------------------- |
 | **Heroku** | Quick deployment, learning | 10 minutes | Free tier available |
-| **AWS** | Production, scalability | 30 minutes | Pay-as-you-go |
+| **AWS**    | Production, scalability    | 30 minutes | Pay-as-you-go       |
 | **Vercel** | Serverless, edge functions | 15 minutes | Free tier available |
 
 ### Quick Start (Heroku - Easiest)
@@ -74,6 +77,7 @@ heroku logs --tail -a delivery-website
 ### Full Setup Guide
 
 Follow the **DEPLOYMENT.md** file for detailed instructions for each platform:
+
 - Prerequisites for each platform
 - Exact steps to configure secrets
 - Troubleshooting tips
@@ -84,6 +88,7 @@ Follow the **DEPLOYMENT.md** file for detailed instructions for each platform:
 Depending on your chosen platform:
 
 ### Heroku Secrets
+
 ```
 HEROKU_API_KEY         (required)
 HEROKU_APP_NAME        (required)
@@ -91,6 +96,7 @@ HEROKU_EMAIL           (required)
 ```
 
 ### AWS Secrets
+
 ```
 AWS_ACCESS_KEY_ID      (required)
 AWS_SECRET_ACCESS_KEY  (required)
@@ -102,6 +108,7 @@ AWS_EC2_DEPLOY_KEY     (required)
 ```
 
 ### Vercel Secrets
+
 ```
 VERCEL_ORG_ID          (required)
 VERCEL_PROJECT_ID      (required)
@@ -122,17 +129,20 @@ Test → Format Check → Lint → Unit Tests → Coverage → Build → Deploy 
 ## 📊 Current Project Status
 
 **Backend**: ✅ Production-ready
+
 - 30 tests passing
 - 83.78% code coverage
 - ESLint compliant
 - Prettier formatted
 
 **Workflows**: ✅ Ready to configure
+
 - 3 deployment options available
 - Health endpoint implemented
 - Test automation included
 
 **Monitoring**: ✅ Built-in
+
 - Health check endpoint
 - Automatic failure notifications
 - Deployment logs available
@@ -140,24 +150,28 @@ Test → Format Check → Lint → Unit Tests → Coverage → Build → Deploy 
 ## 🚀 Implementation Path
 
 ### Immediate (Today)
+
 - [ ] Choose a deployment platform
 - [ ] Follow DEPLOYMENT.md setup instructions
 - [ ] Configure GitHub secrets
 - [ ] Test with `workflow_dispatch` (manual trigger)
 
 ### Short-term (This week)
+
 - [ ] Enable automatic deployment (push to main)
 - [ ] Monitor first production deployment
 - [ ] Set up domain/SSL certificate
 - [ ] Configure MongoDB Atlas (production database)
 
 ### Medium-term (This month)
+
 - [ ] Build React frontend
 - [ ] Connect frontend to deployed backend
 - [ ] Add authentication (JWT)
 - [ ] Set up monitoring alerts
 
 ### Long-term (Future)
+
 - [ ] Add advanced test scenarios
 - [ ] Implement CI/CD for frontend
 - [ ] Set up database backups
