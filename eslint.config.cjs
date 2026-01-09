@@ -15,7 +15,7 @@ module.exports = [
       'build/**',
       'frontend/assets/images/**',
       'coverage/**',
-      '.github/workflows/**'
+      '.github/workflows/**',
     ],
     languageOptions: {
       ecmaVersion: 2022,
@@ -32,12 +32,12 @@ module.exports = [
         beforeAll: 'readonly',
         afterAll: 'readonly',
         beforeEach: 'readonly',
-        afterEach: 'readonly'
-      }
+        afterEach: 'readonly',
+      },
     },
     plugins: { react: reactPlugin },
     rules: {
-    // Best Practices & Error Handling
+      // Best Practices & Error Handling
       eqeqeq: ['error', 'smart'],
       curly: ['error', 'all'],
       'no-implicit-coercion': 'warn',
@@ -66,7 +66,7 @@ module.exports = [
 
       // Node specific (keep console allowed for server logs)
       'no-console': 'off',
-    }
+    },
   },
 
   // Test files override (jest globals & relaxed rules)
@@ -81,12 +81,12 @@ module.exports = [
         beforeAll: 'readonly',
         afterAll: 'readonly',
         beforeEach: 'readonly',
-        afterEach: 'readonly'
-      }
+        afterEach: 'readonly',
+      },
     },
     rules: {
-      'no-unused-expressions': 'off'
-    }
+      'no-unused-expressions': 'off',
+    },
   },
 
   // Frontend React files override
@@ -96,7 +96,7 @@ module.exports = [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      'no-unused-vars': 'off'
-    }
-  }
+      'no-unused-vars': 'off',
+    },
+  },
 ];

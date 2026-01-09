@@ -23,7 +23,7 @@ describe('Edge cases and validation tests', () => {
   test('Creating deliveries with missing product/user returns 400', async () => {
     const res = await request(app)
       .post('/api/deliveries')
-      .send({ product: mongoose.Types.ObjectId(), user: mongoose.Types.ObjectId() });
+      .send({ product: new mongoose.Types.ObjectId(), user: new mongoose.Types.ObjectId() });
     expect(res.status).toBe(400);
   });
 

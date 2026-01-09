@@ -16,7 +16,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).lean();
-    if (!product) {return res.status(404).json({ error: 'Product not found' });}
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
     return res.json(product);
   } catch {
     return res.status(400).json({ error: 'Invalid product id' });
@@ -41,7 +43,9 @@ router.put('/:id', async (req, res) => {
       new: true,
       runValidators: true,
     });
-    if (!product) {return res.status(404).json({ error: 'Product not found' });}
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
     return res.json(product);
   } catch (err) {
     return res.status(400).json({ error: err.message });
@@ -52,7 +56,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) {return res.status(404).json({ error: 'Product not found' });}
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
     return res.status(204).end();
   } catch (err) {
     return res.status(400).json({ error: err.message });
