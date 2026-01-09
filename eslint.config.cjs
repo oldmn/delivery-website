@@ -1,26 +1,35 @@
 const reactPlugin = require('eslint-plugin-react');
 
 /**
- * Modern, Node-first ESLint configuration.
+ * Modern, Node-first ESLint configuration (flat config).
  * - Focuses on Node best-practices and error handling
  * - Adds formatting rules for consistency
- * - Provides overrides for tests and frontend (React)
+ * - Provides file-scoped overrides for tests and frontend (React)
  */
 module.exports = [
+  // Global ignores (must be in separate config at start of array)
   {
     ignores: [
       'node_modules/**',
       'package-lock.json',
       'dist/**',
       'build/**',
-      'frontend/assets/images/**',
       'coverage/**',
       '.github/workflows/**',
+      'frontend/assets/images/**',
     ],
+  },
+
+  // Main config (applies to all .js/.jsx files not ignored)
+  {
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
-      parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+      },
       globals: {
         process: 'readonly',
         module: 'readonly',
@@ -89,7 +98,7 @@ module.exports = [
     },
   },
 
-  // Frontend React files override
+  // Frontend React files override (no-unused-vars disabled for JSX)
   {
     files: ['frontend/**', 'frontend/src/**', 'src/**'],
     plugins: { react: reactPlugin },
